@@ -1,0 +1,539 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Countries_Cities_Location.ipynb",
+      "provenance": [],
+      "collapsed_sections": [],
+      "authorship_tag": "ABX9TyPj9Uxiv/mALRehkx78+7Q7",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Nagmashaik123/Section203-Group06/blob/main/CovidVaccineWorldWide.csv\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "vKCWwK-fvXpI",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 623
+        },
+        "outputId": "6c8d37be-3e7a-4c38-dbf4-c6c7ffef8edb"
+      },
+      "source": [
+        "# Reading the CSV file\n",
+        "import pandas as pd\n",
+        "df=pd.read_csv(r\"CovidVaccine.csv\",error_bad_lines=False)\n",
+        "df"
+      ],
+      "execution_count": 33,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>TweetDate</th>\n",
+              "      <th>TweetText</th>\n",
+              "      <th>TweetAuthor</th>\n",
+              "      <th>TweetLocation</th>\n",
+              "      <th>TweetCountry</th>\n",
+              "      <th>AllHashtags</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>2021-03-16 17:04:39</td>\n",
+              "      <td>Immediately after a needle related panic attac...</td>\n",
+              "      <td>kstep38</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['CovidVaccine']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2021-03-16 17:04:27</td>\n",
+              "      <td>Facebook is launching a new push to promote th...</td>\n",
+              "      <td>MikeMck84268</td>\n",
+              "      <td>Huddersfield, West Yorskshire</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['Facebook', '100daysofcode', 'COVID19Vaccine'...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>2021-03-16 17:04:18</td>\n",
+              "      <td>Last Friday's Urdu Jumu'ah khutbah was also re...</td>\n",
+              "      <td>MakkiMasjid_Mcr</td>\n",
+              "      <td>Manchester, England</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['COVID19', 'vaccine', 'Covid_19', 'CovidVacci...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>2021-03-16 17:04:07</td>\n",
+              "      <td>So while the \"Last guy\" was on TV saying Covid...</td>\n",
+              "      <td>Deemoney521</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['CovidVaccine']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2021-03-16 17:03:48</td>\n",
+              "      <td>A year of so much sacrifice and loss, but now....</td>\n",
+              "      <td>lilkioko</td>\n",
+              "      <td>Chicago, IL</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['vaccinated', 'ScienceRocks']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9995</th>\n",
+              "      <td>2021-03-14 09:17:35</td>\n",
+              "      <td>#Marr @Channel4News @SkyNews \\n\\nThink you're ...</td>\n",
+              "      <td>WaronSpeech</td>\n",
+              "      <td>uk</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9996</th>\n",
+              "      <td>2021-03-14 09:17:34</td>\n",
+              "      <td>#Marr @Channel4News @SkyNews \\n\\nThink you're ...</td>\n",
+              "      <td>WaronSpeech</td>\n",
+              "      <td>uk</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9997</th>\n",
+              "      <td>2021-03-14 09:17:34</td>\n",
+              "      <td>#Marr think you're clever\\nhttps://t.co/EbQ79s...</td>\n",
+              "      <td>WaronSpeech</td>\n",
+              "      <td>uk</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9998</th>\n",
+              "      <td>2021-03-14 09:17:32</td>\n",
+              "      <td>Interactable #heatmap showing number of new #C...</td>\n",
+              "      <td>hangangmagazine</td>\n",
+              "      <td>Seoul, Korea</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['heatmap', 'COVIDVaccinations', 'Korea', 'cor...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9999</th>\n",
+              "      <td>2021-03-14 09:17:16</td>\n",
+              "      <td>Undisputed middleweight champion Marvelous Mar...</td>\n",
+              "      <td>HPVSideEffects</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>UNKNOWN</td>\n",
+              "      <td>['vaccinated']</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>10000 rows × 6 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                TweetDate  ...                                        AllHashtags\n",
+              "0     2021-03-16 17:04:39  ...                                   ['CovidVaccine']\n",
+              "1     2021-03-16 17:04:27  ...  ['Facebook', '100daysofcode', 'COVID19Vaccine'...\n",
+              "2     2021-03-16 17:04:18  ...  ['COVID19', 'vaccine', 'Covid_19', 'CovidVacci...\n",
+              "3     2021-03-16 17:04:07  ...                                   ['CovidVaccine']\n",
+              "4     2021-03-16 17:03:48  ...                     ['vaccinated', 'ScienceRocks']\n",
+              "...                   ...  ...                                                ...\n",
+              "9995  2021-03-14 09:17:35  ...  ['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...\n",
+              "9996  2021-03-14 09:17:34  ...  ['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...\n",
+              "9997  2021-03-14 09:17:34  ...  ['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...\n",
+              "9998  2021-03-14 09:17:32  ...  ['heatmap', 'COVIDVaccinations', 'Korea', 'cor...\n",
+              "9999  2021-03-14 09:17:16  ...                                     ['vaccinated']\n",
+              "\n",
+              "[10000 rows x 6 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 33
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "roJjkW8jvdFD",
+        "outputId": "391c9a0c-fdb8-4d1b-e59d-ed18688595ef"
+      },
+      "source": [
+        "# Installing the library to map the countrie for the corresponding location\n",
+        "!pip install geopy"
+      ],
+      "execution_count": 34,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Requirement already satisfied: geopy in /usr/local/lib/python3.7/dist-packages (1.17.0)\n",
+            "Requirement already satisfied: geographiclib<2,>=1.49 in /usr/local/lib/python3.7/dist-packages (from geopy) (1.50)\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "bGMvjwxRE-Pc",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "066cc1ad-2f43-401c-dc6b-ccc4b3f9b33b"
+      },
+      "source": [
+        "import numpy as np\n",
+        "import re\n",
+        "\n",
+        "# Reading emoji patterns which contains emoticons , symbols & pictographs, transport & map symbols , flags\n",
+        "emojisCollection = re.compile(\"[\"\n",
+        "                       u\"\\U0001F600-\\U0001F64F\"  \n",
+        "                       u\"\\U0001F300-\\U0001F5FF\"  \n",
+        "                       u\"\\U0001F680-\\U0001F6FF\"  \n",
+        "                       u\"\\U0001F1E0-\\U0001F1FF\"  \n",
+        "                       u\"\\U00002702-\\U000027B0\"\n",
+        "                       u\"\\U000024C2-\\U0001F251\"\n",
+        "                       \"]+\", flags=re.UNICODE)\n",
+        "# Stripping the above emoji pattern\n",
+        "df['TweetLocation'] = (df['TweetLocation'].str.replace(emojisCollection, '').str.strip())\n",
+        "# Stripping to fetch first word\n",
+        "df['TweetLocation'] = df.TweetLocation.str.split(', ').str.get(0)\n",
+        "#  Replacing with Unknown if location is none type\n",
+        "df['TweetLocation'] = df['TweetLocation'].replace(np.nan, 'Unknown', regex=True)\n",
+        "df['TweetLocation']"
+      ],
+      "execution_count": 35,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0            Unknown\n",
+              "1       Huddersfield\n",
+              "2         Manchester\n",
+              "3            Unknown\n",
+              "4            Chicago\n",
+              "            ...     \n",
+              "9995              uk\n",
+              "9996              uk\n",
+              "9997              uk\n",
+              "9998           Seoul\n",
+              "9999         Unknown\n",
+              "Name: TweetLocation, Length: 10000, dtype: object"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 35
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "KltxryHevizF"
+      },
+      "source": [
+        "from functools import partial\n",
+        "from geopy.geocoders import Nominatim\n",
+        "import re\n",
+        "\n",
+        "# Function to check the country for corresponding city\n",
+        "def checkCountry(city):\n",
+        "  geolocator = Nominatim(user_agent=\"COVID-19 vaccination attitudes\")\n",
+        "  geocode = partial(geolocator.geocode, language=\"en\")\n",
+        "  if city != \"Unknown\" and not re.match(r'^[_\\W]+$', city)  :\n",
+        "    # Passing city through geocode function to return location object\n",
+        "    location = geocode(city) \n",
+        "    # The last word of the address is the country of the passed location  \n",
+        "    if location.address.find(\", \") != -1:      \n",
+        "      country = str(location.address).split(\", \")[-1] \n",
+        "    elif location is None:\n",
+        "      country = \"Unknown\"   \n",
+        "    else:\n",
+        "      country = location.address          \n",
+        "  else:\n",
+        "    # Setting country unknown if city is not known    \n",
+        "    country = \"Unknown\"  \n",
+        "  return country\n",
+        "\n",
+        "    "
+      ],
+      "execution_count": 36,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "psdH_XDY5awp"
+      },
+      "source": [
+        "cities=[]\n",
+        "countries=[]\n",
+        "cities = df['TweetLocation'].tolist()\n",
+        "for city in cities:\n",
+        "    try:\n",
+        "        # Passing through this function to fetch the country for the correspoding city\n",
+        "        countries.append(checkCountry(city))  #Calling the checkCountry function\n",
+        "    except:\n",
+        "        countries.append('Excetion Raised while retriving Country')"
+      ],
+      "execution_count": 37,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ygkTlk-LJ9v0"
+      },
+      "source": [
+        "# Bundling city and corresponding country together\n",
+        "dict_1=dict(zip(cities,countries))"
+      ],
+      "execution_count": 38,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "-mdmXe-TJ-ev",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 623
+        },
+        "outputId": "f29bb6dd-36ed-4860-eabd-42dcc603eef3"
+      },
+      "source": [
+        "df['TweetCountry']=df['TweetLocation'].map(dict_1)\n",
+        "df\n"
+      ],
+      "execution_count": 39,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>TweetDate</th>\n",
+              "      <th>TweetText</th>\n",
+              "      <th>TweetAuthor</th>\n",
+              "      <th>TweetLocation</th>\n",
+              "      <th>TweetCountry</th>\n",
+              "      <th>AllHashtags</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>2021-03-16 17:04:39</td>\n",
+              "      <td>Immediately after a needle related panic attac...</td>\n",
+              "      <td>kstep38</td>\n",
+              "      <td>Unknown</td>\n",
+              "      <td>Unknown</td>\n",
+              "      <td>['CovidVaccine']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2021-03-16 17:04:27</td>\n",
+              "      <td>Facebook is launching a new push to promote th...</td>\n",
+              "      <td>MikeMck84268</td>\n",
+              "      <td>Huddersfield</td>\n",
+              "      <td>United Kingdom</td>\n",
+              "      <td>['Facebook', '100daysofcode', 'COVID19Vaccine'...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>2021-03-16 17:04:18</td>\n",
+              "      <td>Last Friday's Urdu Jumu'ah khutbah was also re...</td>\n",
+              "      <td>MakkiMasjid_Mcr</td>\n",
+              "      <td>Manchester</td>\n",
+              "      <td>United Kingdom</td>\n",
+              "      <td>['COVID19', 'vaccine', 'Covid_19', 'CovidVacci...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>2021-03-16 17:04:07</td>\n",
+              "      <td>So while the \"Last guy\" was on TV saying Covid...</td>\n",
+              "      <td>Deemoney521</td>\n",
+              "      <td>Unknown</td>\n",
+              "      <td>Unknown</td>\n",
+              "      <td>['CovidVaccine']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2021-03-16 17:03:48</td>\n",
+              "      <td>A year of so much sacrifice and loss, but now....</td>\n",
+              "      <td>lilkioko</td>\n",
+              "      <td>Chicago</td>\n",
+              "      <td>United States</td>\n",
+              "      <td>['vaccinated', 'ScienceRocks']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9995</th>\n",
+              "      <td>2021-03-14 09:17:35</td>\n",
+              "      <td>#Marr @Channel4News @SkyNews \\n\\nThink you're ...</td>\n",
+              "      <td>WaronSpeech</td>\n",
+              "      <td>uk</td>\n",
+              "      <td>United Kingdom</td>\n",
+              "      <td>['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9996</th>\n",
+              "      <td>2021-03-14 09:17:34</td>\n",
+              "      <td>#Marr @Channel4News @SkyNews \\n\\nThink you're ...</td>\n",
+              "      <td>WaronSpeech</td>\n",
+              "      <td>uk</td>\n",
+              "      <td>United Kingdom</td>\n",
+              "      <td>['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9997</th>\n",
+              "      <td>2021-03-14 09:17:34</td>\n",
+              "      <td>#Marr think you're clever\\nhttps://t.co/EbQ79s...</td>\n",
+              "      <td>WaronSpeech</td>\n",
+              "      <td>uk</td>\n",
+              "      <td>United Kingdom</td>\n",
+              "      <td>['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9998</th>\n",
+              "      <td>2021-03-14 09:17:32</td>\n",
+              "      <td>Interactable #heatmap showing number of new #C...</td>\n",
+              "      <td>hangangmagazine</td>\n",
+              "      <td>Seoul</td>\n",
+              "      <td>South Korea</td>\n",
+              "      <td>['heatmap', 'COVIDVaccinations', 'Korea', 'cor...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9999</th>\n",
+              "      <td>2021-03-14 09:17:16</td>\n",
+              "      <td>Undisputed middleweight champion Marvelous Mar...</td>\n",
+              "      <td>HPVSideEffects</td>\n",
+              "      <td>Unknown</td>\n",
+              "      <td>Unknown</td>\n",
+              "      <td>['vaccinated']</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>10000 rows × 6 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                TweetDate  ...                                        AllHashtags\n",
+              "0     2021-03-16 17:04:39  ...                                   ['CovidVaccine']\n",
+              "1     2021-03-16 17:04:27  ...  ['Facebook', '100daysofcode', 'COVID19Vaccine'...\n",
+              "2     2021-03-16 17:04:18  ...  ['COVID19', 'vaccine', 'Covid_19', 'CovidVacci...\n",
+              "3     2021-03-16 17:04:07  ...                                   ['CovidVaccine']\n",
+              "4     2021-03-16 17:03:48  ...                     ['vaccinated', 'ScienceRocks']\n",
+              "...                   ...  ...                                                ...\n",
+              "9995  2021-03-14 09:17:35  ...  ['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...\n",
+              "9996  2021-03-14 09:17:34  ...  ['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...\n",
+              "9997  2021-03-14 09:17:34  ...  ['Marr', 'GAVI', 'vaccines', 'billgates', 'COV...\n",
+              "9998  2021-03-14 09:17:32  ...  ['heatmap', 'COVIDVaccinations', 'Korea', 'cor...\n",
+              "9999  2021-03-14 09:17:16  ...                                     ['vaccinated']\n",
+              "\n",
+              "[10000 rows x 6 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 39
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "HNQC7rc3OxP9"
+      },
+      "source": [
+        "df.to_csv('CovidVaccineWorldWide.csv')"
+      ],
+      "execution_count": 40,
+      "outputs": []
+    }
+  ]
+}
