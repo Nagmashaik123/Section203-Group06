@@ -1,0 +1,279 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Extraction_Of_Tweets.ipynb",
+      "provenance": [],
+      "collapsed_sections": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Nagmashaik123/Section203-Group06/blob/main/InputDataFiles\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "lSfGUGflsrAY",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "e6a251f5-eb37-4f5d-be70-3a03fbfb592e"
+      },
+      "source": [
+        "!pip install tweepy\n"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Requirement already satisfied: tweepy in /usr/local/lib/python3.7/dist-packages (3.10.0)\n",
+            "Requirement already satisfied: six>=1.10.0 in /usr/local/lib/python3.7/dist-packages (from tweepy) (1.15.0)\n",
+            "Requirement already satisfied: requests[socks]>=2.11.1 in /usr/local/lib/python3.7/dist-packages (from tweepy) (2.23.0)\n",
+            "Requirement already satisfied: requests-oauthlib>=0.7.0 in /usr/local/lib/python3.7/dist-packages (from tweepy) (1.3.0)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.7/dist-packages (from requests[socks]>=2.11.1->tweepy) (2020.12.5)\n",
+            "Requirement already satisfied: chardet<4,>=3.0.2 in /usr/local/lib/python3.7/dist-packages (from requests[socks]>=2.11.1->tweepy) (3.0.4)\n",
+            "Requirement already satisfied: idna<3,>=2.5 in /usr/local/lib/python3.7/dist-packages (from requests[socks]>=2.11.1->tweepy) (2.10)\n",
+            "Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1 in /usr/local/lib/python3.7/dist-packages (from requests[socks]>=2.11.1->tweepy) (1.24.3)\n",
+            "Requirement already satisfied: PySocks!=1.5.7,>=1.5.6; extra == \"socks\" in /usr/local/lib/python3.7/dist-packages (from requests[socks]>=2.11.1->tweepy) (1.7.1)\n",
+            "Requirement already satisfied: oauthlib>=3.0.0 in /usr/local/lib/python3.7/dist-packages (from requests-oauthlib>=0.7.0->tweepy) (3.1.0)\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "HOm32ru60ASH"
+      },
+      "source": [
+        "# Extracting twitter data using Twitter API\n",
+        "import json\n",
+        "import csv\n",
+        "import re\n",
+        "import os\n",
+        "import tweepy\n",
+        "import getpass\n",
+        "# Defining function to scrape twitter data\n",
+        "def scraping_twitter(api_key, api_secret, access_token, access_secret):\n",
+        "    # Hashtag of the tweets to be extracted\n",
+        "    hashtag = \"#Vaccinated OR #CovidVaccine OR #Covid19Vaccine\"\n",
+        "    # authenticating the twitter developer account to access the tweets\n",
+        "    authenticate = tweepy.OAuthHandler(api_key, api_secret)\n",
+        "    authenticate.set_access_token(access_token, access_secret)\n",
+        "    # Extracting tweets using API function of tweepy package\n",
+        "    api = tweepy.API(authenticate, wait_on_rate_limit=True)\n",
+        "    file_name = 'CovidVaccine'\n",
+        "    with open('%s.csv' % (file_name), 'w') as file:\n",
+        "        w = csv.writer(file)\n",
+        "        w.writerow(['TweetDate', 'TweetText', 'TweetAuthor','TweetLocation','AllHashtags'])\n",
+        "        # Iterate and extract tweets\n",
+        "        for tweet in tweepy.Cursor(api.search, q=hashtag+' -filter:retweets', lang=\"en\", since = \"2021-02-15\", until = \"2021-03-18\", tweet_mode='extended').items(10000):\n",
+        "          w.writerow([tweet.created_at, tweet.full_text, tweet.user.screen_name,tweet.user.location, [e['text'] for e in tweet._json['entities']['hashtags']]])\n",
+        "\n",
+        "api_key = getpass.getpass('Enter twitter consumer api key :  ')\n",
+        "api_secret = getpass.getpass('Enter twitter consumer api secret key :  ')\n",
+        "access_token = getpass.getpass('Enter twitter access token  :  ')\n",
+        "access_secret = getpass.getpass('Enter twitter access secret token :  ')\n",
+        "    \n",
+        "scraping_twitter(api_key, api_secret, access_token, access_secret)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 589
+        },
+        "id": "XbeTYCudob1m",
+        "outputId": "f4f4d619-8de3-436e-fcb6-3f9297d76e4b"
+      },
+      "source": [
+        "\n",
+        "# Since twitter is limited to return 10000 records per one user API request. Three differnt files has been generated\n",
+        "# to populate 25000 records of data using above functions and renaming files as #CovidVaccine1.csv, #CovidVaccine2.csv, #CovidVaccine3.csv\n",
+        "# Concatinating them to one single file as #CovidVaccine.csv\n",
+        "\n",
+        "import os\n",
+        "import glob\n",
+        "import pandas as pd\n",
+        "os.chdir(\"/content/InputDataFiles\")\n",
+        "\n",
+        "extension = 'csv'\n",
+        "all_filenames = [i for i in glob.glob('*.{}'.format(extension))]\n",
+        "\n",
+        "#combine all files in the list\n",
+        "dataFrame = pd.concat([pd.read_csv(f) for f in all_filenames ])\n",
+        "#export to csv\n",
+        "dataFrame.to_csv( \"CovidVaccine.csv\", index=False, encoding='utf-8-sig')\n",
+        "dataFrame\n"
+      ],
+      "execution_count": 1,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>TweetDate</th>\n",
+              "      <th>TweetText</th>\n",
+              "      <th>TweetAuthor</th>\n",
+              "      <th>TweetLocation</th>\n",
+              "      <th>AllHashtags</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>2021-03-17 23:59:34</td>\n",
+              "      <td>The only way #COVID19 can mutate with variants...</td>\n",
+              "      <td>kemsunde</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>['COVID19', 'CovidVaccine', 'GetTheFactsGetThe...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2021-03-17 23:59:20</td>\n",
+              "      <td>I've now officially had my 1st dose of the #Co...</td>\n",
+              "      <td>ManeckiN</td>\n",
+              "      <td>The Wild Western Wastes</td>\n",
+              "      <td>['CovidVaccine', 'COVID19', 'PfizerVaccine', '...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>2021-03-17 23:58:31</td>\n",
+              "      <td>@hendopolis Imagine if the #Brexit referendum ...</td>\n",
+              "      <td>raymasseytweets</td>\n",
+              "      <td>England, United Kingdom</td>\n",
+              "      <td>['Brexit', 'EU', 'TrueColours', 'Impfstoff', '...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>2021-03-17 23:58:03</td>\n",
+              "      <td>@EICostheta @RicBarraArch1 @insiders Yep. The ...</td>\n",
+              "      <td>MikeFitzAU</td>\n",
+              "      <td>Mudjimba, Qld, Australia</td>\n",
+              "      <td>['LiarsNParasites', 'CovidVaccine']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2021-03-17 23:57:37</td>\n",
+              "      <td>This sounds like an important topic for @NickS...</td>\n",
+              "      <td>stephjantzen</td>\n",
+              "      <td>Greater Sacramento, California</td>\n",
+              "      <td>['FiresideChat', 'CovidVaccine']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9995</th>\n",
+              "      <td>2021-03-12 12:50:29</td>\n",
+              "      <td>@abc7newsbayarea #CovidVaccine ...of course th...</td>\n",
+              "      <td>chelseazago</td>\n",
+              "      <td>Communist Canada</td>\n",
+              "      <td>['CovidVaccine']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9996</th>\n",
+              "      <td>2021-03-12 12:50:21</td>\n",
+              "      <td>Got myshot. Excited!!  #vaccinated #VirusCoron...</td>\n",
+              "      <td>gpickner</td>\n",
+              "      <td>Pierre, SD</td>\n",
+              "      <td>['vaccinated', 'VirusCoronashot']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9997</th>\n",
+              "      <td>2021-03-12 12:50:05</td>\n",
+              "      <td>#Mozambique launches its #Covid19vaccine progr...</td>\n",
+              "      <td>ARCBriefing</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>['Mozambique', 'Covid19vaccine', 'ARCBriefing']</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9998</th>\n",
+              "      <td>2021-03-12 12:50:03</td>\n",
+              "      <td>#COVID19Vaccine: Karnataka CM B S Yediyurappa ...</td>\n",
+              "      <td>TheDailyPioneer</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>['COVID19Vaccine', 'BSYediyurappa', 'Karnataka...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9999</th>\n",
+              "      <td>2021-03-12 12:49:58</td>\n",
+              "      <td>Time for a full investigation into Ron DeSanti...</td>\n",
+              "      <td>Osceola_DEC</td>\n",
+              "      <td>Osceola County, Florida</td>\n",
+              "      <td>['CovidVaccine', 'DisgracefulDesantis']</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>26249 rows × 5 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                TweetDate  ...                                        AllHashtags\n",
+              "0     2021-03-17 23:59:34  ...  ['COVID19', 'CovidVaccine', 'GetTheFactsGetThe...\n",
+              "1     2021-03-17 23:59:20  ...  ['CovidVaccine', 'COVID19', 'PfizerVaccine', '...\n",
+              "2     2021-03-17 23:58:31  ...  ['Brexit', 'EU', 'TrueColours', 'Impfstoff', '...\n",
+              "3     2021-03-17 23:58:03  ...                ['LiarsNParasites', 'CovidVaccine']\n",
+              "4     2021-03-17 23:57:37  ...                   ['FiresideChat', 'CovidVaccine']\n",
+              "...                   ...  ...                                                ...\n",
+              "9995  2021-03-12 12:50:29  ...                                   ['CovidVaccine']\n",
+              "9996  2021-03-12 12:50:21  ...                  ['vaccinated', 'VirusCoronashot']\n",
+              "9997  2021-03-12 12:50:05  ...    ['Mozambique', 'Covid19vaccine', 'ARCBriefing']\n",
+              "9998  2021-03-12 12:50:03  ...  ['COVID19Vaccine', 'BSYediyurappa', 'Karnataka...\n",
+              "9999  2021-03-12 12:49:58  ...            ['CovidVaccine', 'DisgracefulDesantis']\n",
+              "\n",
+              "[26249 rows x 5 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 1
+        }
+      ]
+    }
+  ]
+}
