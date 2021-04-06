@@ -5,4 +5,8 @@ Step 2: Extracting Country for each tweet location by calling Geopy API - File :
 Step 3: Concatinate all the tweets containing each of 10000 records - File : Concatinate_tweets.ipynb. # Combining all files in CovidVaccine.zip to a single file of CovidVaccineWorld.csv<br/>
 Step 4: Data cleaning the tweets extracted - File : Data_Cleaning_Tweets.ipynb <br/>
 Step 5: Percentage of people who got vaccinated country wide - File : Vaccination_Country_Analysis.ipynb <br/>
+Step 6: Vaccination Dosage count from different tweets  - File : Vacc_Dose_TM_Bi-gram.ipynb <br/>
+Step 7: Different brands of vaccines identified from topic modelling concepts using monograms from tweets - File : Vacc_Brands_TM_Monograms.ipynb <br/>
+Step 8: Different reactions observed in people after getting vaccinated observed data processing on tweets - File : Vaccination_Reactions_Data_Processing.ipynb <br/>
+
 
